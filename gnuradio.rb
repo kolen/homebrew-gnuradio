@@ -22,6 +22,7 @@ class Gnuradio < Formula
   depends_on "fftw"
   depends_on "gsl"
   depends_on "zeromq"
+  depends_on "swig" => :build
 
   # For documentation
   depends_on "doxygen" => :build
@@ -31,6 +32,7 @@ class Gnuradio < Formula
   depends_on "sdl" => :recommended
   depends_on "jack" => :recommended
   depends_on "portaudio" => :recommended
+  depends_on "pygtk" => :recommended
 
   # gnuradio is known not to compile against CMake >3.3.2 currently.
   resource "cmake" do
@@ -115,10 +117,11 @@ class Gnuradio < Formula
     enabled_components = %w[gr-analog gr-fft volk gr-filter gnuradio-runtime
                             gr-blocks testing gr-pager gr-noaa gr-channels
                             gr-audio gr-fcd gr-vocoder gr-fec gr-digital
-                            gr-dtv gr-atsc gr-trellis gr-zeromq]
+                            gr-dtv gr-atsc gr-trellis gr-zeromq python]
     enabled_components << "gr-wavelet"
     enabled_components << "gr-video-sdl" if build.with? "sdl"
     enabled_components << "gr-uhd" if build.with? "uhd"
+    enabled_components << "grc" if build.with? "pygtk"
     enabled_components += %w[doxygen sphinx] if build.with? "documentation"
 
     enabled_components.each do |c|
