@@ -3,7 +3,7 @@ class Gnuradio < Formula
   homepage "http://gnuradio.org/"
   url "http://gnuradio.org/releases/gnuradio/gnuradio-3.7.10.1.tar.gz"
   sha256 "63d7b65cc4abe22f47b8f41caaf7370a0a502b91e36e29901ba03e8838ab4937"
-  revision 1
+  revision 2
 
   bottle do
     rebuild 1
@@ -34,6 +34,7 @@ class Gnuradio < Formula
   depends_on "jack" => :recommended
   depends_on "portaudio" => :recommended
   depends_on "pygtk" => :recommended
+  depends_on "wxpython" => :recommended
 
   resource "numpy" do
     url "https://pypi.python.org/packages/source/n/numpy/numpy-1.10.1.tar.gz"
@@ -91,6 +92,7 @@ class Gnuradio < Formula
     enabled_components << "gr-video-sdl" if build.with? "sdl"
     enabled_components << "gr-uhd" if build.with? "uhd"
     enabled_components << "grc" if build.with? "pygtk"
+    enabled_components << "gr-wxgui" if build.with? "wxpython"
     enabled_components += %w[doxygen sphinx] if build.with? "documentation"
 
     enabled_components.each do |c|
