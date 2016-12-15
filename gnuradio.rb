@@ -3,7 +3,7 @@ class Gnuradio < Formula
   homepage "http://gnuradio.org/"
   url "http://gnuradio.org/releases/gnuradio/gnuradio-3.7.10.1.tar.gz"
   sha256 "63d7b65cc4abe22f47b8f41caaf7370a0a502b91e36e29901ba03e8838ab4937"
-  revision 2
+  revision 5
 
   bottle do
     rebuild 1
@@ -11,6 +11,10 @@ class Gnuradio < Formula
     sha256 "187f22d812f4ba86af2d2f64e9473647b49aa2373d6688d7ecfb840374285749" => :el_capitan
     sha256 "41eb9fdae72761b7a83f284f1e7613da9e3ce916e0f98f20ad3aafe417be5a4e" => :yosemite
   end
+
+  # Fixes linkage of python (swig) bindings directly to python
+  # https://github.com/gnuradio/gnuradio/pull/604
+  patch :DATA
 
   option :universal
 
@@ -148,3 +152,17 @@ class Gnuradio < Formula
     system "python", (testpath/"test.py")
   end
 end
+
+__END__
+
+--- a/cmake/Modules/GrSwig.cmake
++++ b/cmake/Modules/GrSwig.cmake
+@@ -190,7 +190,7 @@
+     #setup the actual swig library target to be built
+     include(UseSWIG)
+     SWIG_ADD_MODULE(${name} python ${ifiles})
+-    SWIG_LINK_LIBRARIES(${name} ${PYTHON_LIBRARIES} ${GR_SWIG_LIBRARIES})
++    SWIG_LINK_LIBRARIES(${name} "-undefined dynamic_lookup" ${GR_SWIG_LIBRARIES})
+     if(${name} STREQUAL "runtime_swig")
+         SET_TARGET_PROPERTIES(${SWIG_MODULE_runtime_swig_REAL_NAME} PROPERTIES DEFINE_SYMBOL "gnuradio_runtime_EXPORTS")
+     endif(${name} STREQUAL "runtime_swig")
