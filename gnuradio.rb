@@ -114,7 +114,7 @@ class Gnuradio < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/gnuradio-config-info -v").chomp
+    system("#{bin}/gnuradio-config-info -v")
 
     (testpath/"test.py").write <<-EOS.undent
         from gnuradio import blocks
