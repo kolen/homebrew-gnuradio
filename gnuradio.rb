@@ -117,34 +117,23 @@ class Gnuradio < Formula
     assert_match version.to_s, shell_output("#{bin}/gnuradio-config-info -v").chomp
 
     (testpath/"test.py").write <<-EOS.undent
-        from gnuradio import analog
         from gnuradio import blocks
         from gnuradio import gr
-        import time
 
         class top_block(gr.top_block):
             def __init__(self):
                 gr.top_block.__init__(self, "Top Block")
-                self.samp_rate = samp_rate = 32000
-                self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-                self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
-                self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 1000, 1, 0)
-                self.connect((self.analog_sig_source_x_0, 0), (self.blocks_throttle_0, 0))
-                self.connect((self.blocks_throttle_0, 0), (self.blocks_null_sink_0, 0))
-
-            def get_samp_rate(self):
-                return self.samp_rate
-
-            def set_samp_rate(self, samp_rate):
-                self.samp_rate = samp_rate
-                self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-                self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
+                self.samp_rate = 32000
+                s = gr.sizeof_gr_complex
+                self.blocks_null_source_0 = blocks.null_source(s)
+                self.blocks_null_sink_0 = blocks.null_sink(s)
+                self.blocks_head_0 = blocks.head(s, 1024)
+                self.connect((self.blocks_head_0, 0), (self.blocks_null_sink_0, 0))
+                self.connect((self.blocks_null_source_0, 0), (self.blocks_head_0, 0))
 
         def main(top_block_cls=top_block, options=None):
             tb = top_block_cls()
             tb.start()
-            time.sleep(2)
-            tb.stop()
             tb.wait()
 
         main()
