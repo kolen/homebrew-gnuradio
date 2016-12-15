@@ -150,6 +150,14 @@ class Gnuradio < Formula
         main()
     EOS
     system "python", (testpath/"test.py")
+
+    Dir.chdir(testpath) do
+      system "gr_modtool", "newmod", "test"
+      Dir.chdir("gr-test") do
+        system "gr_modtool", "add", "-t", "general", "test_ff", "-l", "python",
+               "-y", "--argument-list=''", "--add-python-qa"
+      end
+    end
   end
 end
 
