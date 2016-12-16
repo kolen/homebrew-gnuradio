@@ -18,6 +18,7 @@ class Gnuradio < Formula
   patch :DATA
 
   option :universal
+  option "with-documentation", "Build with documentation"
 
   depends_on "pkg-config" => :build
 
