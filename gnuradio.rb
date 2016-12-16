@@ -14,8 +14,11 @@ class Gnuradio < Formula
   end
 
   # Fixes linkage of python (swig) bindings directly to python
-  # https://github.com/gnuradio/gnuradio/pull/604
-  patch :DATA
+  # https://github.com/gnuradio/gnuradio/pull/1146
+  patch do
+    url "https://github.com/gnuradio/gnuradio/pull/1146.patch"
+    sha256 "cebec5b09319bbe361e21a26cdf3ac6a17375bfd78b4dfa92f1e69547a6d1f80"
+  end
 
   option :universal
   option "with-documentation", "Build with documentation"
@@ -151,17 +154,3 @@ class Gnuradio < Formula
     end
   end
 end
-
-__END__
-
---- a/cmake/Modules/GrSwig.cmake
-+++ b/cmake/Modules/GrSwig.cmake
-@@ -190,7 +190,7 @@
-     #setup the actual swig library target to be built
-     include(UseSWIG)
-     SWIG_ADD_MODULE(${name} python ${ifiles})
--    SWIG_LINK_LIBRARIES(${name} ${PYTHON_LIBRARIES} ${GR_SWIG_LIBRARIES})
-+    SWIG_LINK_LIBRARIES(${name} "-undefined dynamic_lookup" ${GR_SWIG_LIBRARIES})
-     if(${name} STREQUAL "runtime_swig")
-         SET_TARGET_PROPERTIES(${SWIG_MODULE_runtime_swig_REAL_NAME} PROPERTIES DEFINE_SYMBOL "gnuradio_runtime_EXPORTS")
-     endif(${name} STREQUAL "runtime_swig")
