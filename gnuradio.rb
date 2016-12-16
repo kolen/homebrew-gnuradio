@@ -17,7 +17,7 @@ class Gnuradio < Formula
   # https://github.com/gnuradio/gnuradio/pull/1146
   patch do
     url "https://github.com/gnuradio/gnuradio/pull/1146.patch"
-    sha256 "cebec5b09319bbe361e21a26cdf3ac6a17375bfd78b4dfa92f1e69547a6d1f80"
+    sha256 "385b62cc46ff07696f7ff4ff89bbb4891909947027f9712be040937d477f6d81"
   end
 
   option :universal
